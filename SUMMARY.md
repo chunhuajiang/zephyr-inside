@@ -8,6 +8,7 @@
 * [内核篇]
    * [概述]
       * [执行上下文](src/kernel/top/context.md)
+      * [初始线程](src/kernel/top/thread.md)
       * [内核链表](src/kernel/top/dlist.md)
    * [nanokernel]
       * [等待队列](src/kernel/nanokernel/wait_q.md)

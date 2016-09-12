@@ -4,7 +4,10 @@ date: 2016-08-03 17:24:32
 categories: ["Zephyr OS"]
 tags: [Zephyr]
 ---
-本文讲解 Zephyr OS 用于描述线程相关信息的结构体，内核中几乎其它所有服务都或多或少地使用了该结构体，所以在正式进入内核相关部分的学习之前，我们先学习该结构体。
+本文讲解 Zephyr OS 用于描述线程相关信息的结构体，内核中几乎其它所有服务都或多或少地使用了该结构体，所以在正式进入内核相关部分的学习之前，我们先学习该结构体。此外，还介绍了一下如何新建一个线程
+
+- [线程结构体的定义](#线程结构体的定义)
+- [创建一个新线程](#创建一个新线程)
 
 <!--more-->
 
@@ -86,7 +89,7 @@ typedef void (*_thread_entry_t)(_thread_arg_t arg1,
 - next_thread：与 link 类似，指向线程构成的链表中的下一个线程。不过 next_thread 指向的链表是由内核中所有的fiber和task构成的链表。
 - nano_timeout：指定该线程所绑定的超时服务。关于超时服务，请参考《Zephyr OS nano 内核篇：超时服务 timeout》
 - errno_var：错误号。
-- uk_task_ptr：
+- uk_task_ptr：与microkernel相关，目前还不知道是干嘛的。
 
 # 创建一个新线程
 ```
@@ -100,14 +103,17 @@ void _new_thread(char *pStackMem, unsigned stackSize,
 	struct tcs *tcs = (struct tcs *) pStackMem;
 
 #ifdef CONFIG_INIT_STACKS
+	// 初始化线程栈的内容，让其每个字节都被初始化为0xaa。
+    // 如果不初始化，则栈帧中被填充为0x00，这是为什么？
+    //     因为线程栈的本质是一个全局变量，而全局变量默认被初始化为0
+    // 如何知道线程栈的本质是一个全局变量？
+    //     追踪代码，查看调用_new_thread 的地方，看看传进来的参数不就知道了么！
 	memset(pStackMem, 0xaa, stackSize);
 #endif
-
-	/* carve the thread entry struct from the "base" of the stack */
-
+	// STACK_ROUND_DOWN(pointer) 的作用请参考【说明1】
+    // pInitCtx 用来保存栈帧的信息，即线程的上下文信息，请参考【说明2】
 	pInitCtx = (struct __esf *)(STACK_ROUND_DOWN(stackEnd) -
 				    sizeof(struct __esf));
-
 	pInitCtx->pc = ((uint32_t)_thread_entry) & 0xfffffffe;
 	pInitCtx->a1 = (uint32_t)pEntry;
 	pInitCtx->a2 = (uint32_t)parameter1;
@@ -116,21 +122,17 @@ void _new_thread(char *pStackMem, unsigned stackSize,
 	pInitCtx->xpsr =
 		0x01000000UL; /* clear all, thumb bit is 1, even if RO */
 
+	// 初始化 link、flag和prio
 	tcs->link = NULL;
 	tcs->flags = priority == -1 ? TASK | PREEMPTIBLE : FIBER;
 	tcs->prio = priority;
 
 #ifdef CONFIG_THREAD_CUSTOM_DATA
-	/* Initialize custom data field (value is opaque to kernel) */
-
 	tcs->custom_data = NULL;
 #endif
 
 #ifdef CONFIG_THREAD_MONITOR
-	/*
-	 * In debug mode tcs->entry give direct access to the thread entry
-	 * and the corresponding parameters.
-	 */
+	// 指定线程的入口函数和参数
 	tcs->entry = (struct __thread_entry *)(pInitCtx);
 #endif
 
@@ -143,6 +145,7 @@ void _new_thread(char *pStackMem, unsigned stackSize,
 	tcs->preempReg.psp = (uint32_t)pInitCtx;
 	tcs->basepri = 0;
 
+	// 初始化超时服务，具体信息请参考《Zephyr OS nano 内核篇：超时服务 timeout》
 	_nano_timeout_tcs_init(tcs);
 
 	/* initial values in all other registers/TCS entries are irrelevant */
@@ -151,3 +154,69 @@ void _new_thread(char *pStackMem, unsigned stackSize,
 }
 
 ```
+先看一下主要的入参：
+- pStackMem：指定线程栈的起始地址
+- stackSize：指定线程栈的大小
+- pEntry：指定线程的入口函数的地址
+- parameter1、parameter2、parameter3：指定传递给入口函数的参数。
+- 其它：其它一些线程相关的设置，不影响我们理解线程的本质
+
+从上面的参数，我们可以初步估计是如何新建一个线程的：
+- 为线程分配一段栈空间。
+- 为线程指定一个入口函数以及它的参数。
+- 进行一些初始化工具，具体如何初始化就得继续看代码了。
+
+直接贴一张图总结线程栈的内存空间分布，_new_thread() 的主要任务就是构造这样一张图。
+
+<center>![](/images/zephyr/kernel/top/thread/stack.png)</center>
+
+<center>线程栈的内存分布图</center>
+
+如图所示，在创建线程时，对线程栈进行了初始化：
+- 在线程栈的低地址处，保存了一个结构体 struct tcs，用来保存线程的控制信息。
+- 在线程栈的高地址处，存放了一个结构体 struct __esf，用来保存线程的上下文。
+
+【说明1】
+
+STACK_ROUND_DOWN(x)和STACK_ROUND_UP(x)这对宏的作用是确保栈空间是 STACK_ALIGN_SIZE 字节对齐的。
+
+当 x 表示栈空间的高地址时，需要调用 STACK_ROUND_DOWN(x) 以确保 x 是 STACK_ALIGN_SIZE 字节对齐的，它的主要思想如下：
+- 如果 x 本来就是 STACK_ALIGN_SIZE 字节对齐的，则不做如何处理
+- 如果 x 不是 STACK_ALIGN_SIZE 字节对齐的，它会舍弃高地址的 0 ~ (STACK_ALIGN_SIZE - 1) 字节，以确保 x 是 STACK_ALIGN_SIZE 字节对齐的。
+
+当 x 表示栈空间的低地址时，需要调用 STACK_ROUND_UP(x) 以确保 x 是 STACK_ALIGN_SIZE 字节对齐的，它的主要思想与 STACK_ROUND_DOWN(x) 类似。
+
+【说明2】
+
+在《Zephyr OS 内核篇：上下文》一文中，我们已经知道，Zephyr 中的上下文分为三种：fiber、task 和中断，但是对于上下文具体值的什么，我们还不清楚。
+
+个人理解，所谓的上下文指的就是线程在运行时芯片内部的环境，即芯片中相关寄存器的值。通过这些寄存器的值，能唯一确定一个线程的运行。那么，哪些因素将确定一个唯一的线程呢?
+
+对于 Cortex-M 系列，内核定义了如下结构体来保存上下文的寄存器：
+```
+struct __esf {
+	//sys_define_gpr_with_alias 用来定义成员的别名，其本质就是一个联合体
+	sys_define_gpr_with_alias(a1, r0);
+	sys_define_gpr_with_alias(a2, r1);
+	sys_define_gpr_with_alias(a3, r2);
+	sys_define_gpr_with_alias(a4, r3);
+	sys_define_gpr_with_alias(ip, r12);
+	sys_define_gpr_with_alias(lr, r14);
+	sys_define_gpr_with_alias(pc, r15);
+	uint32_t xpsr;
+#ifdef CONFIG_FLOAT
+	float s[16];
+	uint32_t fpscr;
+	uint32_t undefined;
+#endif
+};
+```
+其中，
+- a1：用来保存线程入口函数的地址。
+- a2：用来保存线程入口函数的第一个参数的值。
+- a3：用来保存线程入口函数的第二个参数的值。
+- a4：用来保存线程入口函数的第三个参数的值。
+- ip：不知。。。
+- lr：用来保存线程返回时的地址。
+- pc：当线程执行到一半时，可能被切换出去(比如时间片到期了)，而 pc 指针就可以用来保存被切换出去时的地址。
+- xpsr：用来保存线程当前的状态。
