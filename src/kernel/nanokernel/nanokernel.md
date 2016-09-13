@@ -67,9 +67,7 @@ Zephyr OS 中线程的状态可以分为三类：
 
 线程的状态切换如图 1 所示。
 
-<center>![](/images/zephyr/kernel/top/nanokernel/1.png)</center>
+<center>![](/images/zephyr/kernel/nanokernel/nanokernel/1.png)</center>
 
 <center>图 1. 线程状态切换</center>
-
-# 各种线程的链表
 

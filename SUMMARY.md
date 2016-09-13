@@ -6,13 +6,26 @@
    * [连接硬件 Arduino Due](src/introduce/arduino_due.md)
    * [漫谈Zephyr与Contiki的未来](src/introduce/vs-contiki.md)
 * [内核篇]
-   * [概述]
-      * [执行上下文](src/kernel/top/context.md)
-      * [初始线程](src/kernel/top/thread.md)
-      * [内核大总管_nanokernel](src/kernel/top/nanokernel.md)
-      * [内核链表](src/kernel/top/dlist.md)
    * [nanokernel]
-      * [等待队列](src/kernel/nanokernel/wait_q.md)
+	  * [前言]
+      * [执行上下文](src/kernel/nanokernel/context.md)
+      * [初识线程](src/kernel/nanokernel/thread.md)
+      * [内核大总管_nanokernel](src/kernel/nanokernel/nanokernel.md)
+	  * [fiber服务]
+	  * [系统启动流程(汇编部分)]
+	  * [系统启动流程(C语言部分)]
+	  * [原子操作 atomic]
+      * [内核链表 dlist](src/kernel/nanokernel/dlist.md)
+      * [等待队列 wait_q](src/kernel/nanokernel/wait_q.md)
+	  * [超时服务 timeout]
+	  * [定时器 timer]
+	  * [SysTick]
+	  * [上下文切换]
+	  * [fifo]
+	  * [lifo]
+	  * [信号量 sema]
+	  * [Ring Buffer]
+	  * [总结]
 * [驱动篇]
    * [设备驱动模型](src/driver/device-driver-module.md)
 * [网络篇]

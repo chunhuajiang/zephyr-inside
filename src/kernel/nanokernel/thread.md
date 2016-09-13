@@ -1,13 +1,14 @@
 ---
-title: Zephys OS 内核篇：线程模型
+title: Zephys OS 内核篇：初识线程
 date: 2016-08-03 17:24:32
 categories: ["Zephyr OS"]
 tags: [Zephyr]
 ---
-本文讲解 Zephyr OS 用于描述线程相关信息的结构体，内核中几乎其它所有服务都或多或少地使用了该结构体，所以在正式进入内核相关部分的学习之前，我们先学习该结构体。此外，还介绍了一下如何新建一个线程
+本文讲解 Zephyr OS 用于描述线程相关信息的结构体，内核中几乎其它所有服务都或多或少地使用了该结构体，所以在正式进入内核相关部分的学习之前，我们先学习该结构体。此外，还介绍了一下如何新建一个线程。
 
 - [线程结构体的定义](#线程结构体的定义)
 - [创建一个新线程](#创建一个新线程)
+- [线程的本质](#线程的本质)
 
 <!--more-->
 
@@ -44,7 +45,7 @@ struct tcs {
 
 > 注意：由于该结构体涉及到芯片的寄存器，所以不同架构的芯片的线程控制结构体是有区别的。本文讨论cortex-m3 的线程控制结构。另外，由于与具体芯片相关，所以将 Zephyr OS 移植到其它架构的芯片时，需要考虑移植线程相关的代码。
 
-- link：多个线程可以构成一个线程链表，link 就指向该链表中的下一个线程。例如，内核中的所有处于就绪状态的线程会形成一个就绪队列；内核中的所有等待线程会形成一个等待队列，具体信息请参考《Zephyr OS nano 内核篇：等待队列 wait_q》
+- link：多个线程可以构成一个线程链表，link 就指向该链表中的下一个线程。例如，处于就绪状态的线程会形成一个就绪队列，等待线程会形成一个等待队列，具体信息请参考《Zephyr OS nano 内核篇： fiber》和《Zephyr OS nano 内核篇：等待队列 wait_q》
 - flags：用来表示该线程具有哪些 flag，这些 flag 是系统预定义的位掩码。
 > 所谓的位掩码，是指每个每个掩码占 1 位。
 > ```
@@ -171,20 +172,40 @@ void _new_thread(char *pStackMem, unsigned stackSize,
 - parameter1、parameter2、parameter3：指定传递给入口函数的参数。
 - 其它：其它一些线程相关的设置，不影响我们理解线程的本质
 
-从上面的参数，我们可以初步估计是如何新建一个线程的：
-- 为线程分配一段栈空间。
+_new_thread() 的主要任务：
+- 为线程分配一段栈空间(其实是调用_new_thread()的函数分配的)。
 - 为线程指定一个入口函数以及它的参数。
-- 进行一些初始化工具，具体如何初始化就得继续看代码了。
+- 对线程栈进行初始化，包括：
+ - 在线程栈的低地址处，存储一个结构体 struct tcs，用来保存线程的控制信息。
+ - 在线程栈的高地址处，存储一个结构体 struct __esf，用来保存线程的上下文。
 
-直接贴一张图总结线程栈的内存空间分布，_new_thread() 的主要任务就是构造这样一张图。
+用一张图可以很好地总结这个函数：
 
-<center>![](/images/zephyr/kernel/top/thread/stack.png)</center>
+<center>![](/images/zephyr/kernel/nanokernel/thread/stack.png)</center>
 
 <center>线程栈的内存分布图</center>
 
-如图所示，在创建线程时，对线程栈进行了初始化：
-- 在线程栈的低地址处，保存了一个结构体 struct tcs，用来保存线程的控制信息。
-- 在线程栈的高地址处，存放了一个结构体 struct __esf，用来保存线程的上下文。
+
+然后再看看本函数的最后一条语句 THREAD_MONITOR_INIT(tcs) ，它涉及到内核中的一个线程链表。
+```
+#define THREAD_MONITOR_INIT(tcs) _thread_monitor_init(tcs)
+
+static ALWAYS_INLINE void _thread_monitor_init(struct tcs *tcs /* thread */
+					   )
+{
+	unsigned int key;
+
+	key = irq_lock();
+	tcs->next_thread = _nanokernel.threads;
+	_nanokernel.threads = tcs;
+	irq_unlock(key);
+}
+```
+_nanokernel 是我们下一节《Zephyr OS nano 内核篇：内核大总管_nanokernel》的主角，是内核中定义的一个全局变量。它有一个成员 threads，指向内核中所有线程构成的一个单链表。
+
+_thread_monitor_init() 的作用是将线程加入到该链表的表头。
+
+关于内核中的线程构成的各种链表，请参考《Zephyr OS nano 内核篇：总结》。
 
 【说明1】
 
