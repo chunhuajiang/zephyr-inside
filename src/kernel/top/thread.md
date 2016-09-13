@@ -66,11 +66,11 @@ struct tcs {
 #define NO_METRICS 0x400   // BIT(10)为 1 表示_Swap() not to update task metrics
 ```
 
-- basepri：看名字应该是用于描述中断的基本优先级，即低于该优先级的中断将被屏蔽，高于等于该优先级的中断没被屏蔽。
+- basepri：用于上下文切换时的现场保存与恢复。当线程由执行态转为其它状态(例如等待一个信号量而被加入到等待队列、或时间片到期后被加入就绪队列)，调度器会将该线程的 BASEPRI 寄存器中的值保持到该成员。当该线程被再次调度时，调度器会将该变量恢复到寄存器中。
 - prio：指定本线程的优先级。就绪链表中的线程就是按照优先级的顺序排列的。
 - custom_data：线程自定义数据。
 - coopReg：对于 Cortex-M 系列，该变量没有使用。
-- preempReg：目前没看出有啥用。
+- preempReg：也是用于上下文切换时的现场保存与恢复，这些寄存器包括 v1-v8、堆栈寄存器sp
 - entry：函数指针，指向线程的入口函数(即线程的执行体)和参数，当线程被调用时候将调用该函数。
 
 > ```
@@ -86,7 +86,7 @@ typedef void (*_thread_entry_t)(_thread_arg_t arg1,
 							    _thread_arg_t arg3);
 > ```
 
-- next_thread：与 link 类似，指向线程构成的链表中的下一个线程。不过 next_thread 指向的链表是由内核中所有的fiber和task构成的链表。
+- next_thread：与 link 类似，指向线程构成的链表中的下一个线程。不过 next_thread 指向的链表是由内核中所有的 fiber 和 task 构成的链表。
 - nano_timeout：指定该线程所绑定的超时服务。关于超时服务，请参考《Zephyr OS nano 内核篇：超时服务 timeout》
 - errno_var：错误号。
 - uk_task_ptr：与microkernel相关，目前还不知道是干嘛的。

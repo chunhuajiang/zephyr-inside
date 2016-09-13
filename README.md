@@ -1,7 +1,17 @@
 # Zephyr OS 学习笔记
 
+之前看到一句话：好的读书笔记是对一本书的敬意。
+
+越是深入学习，越为 Zephyr 着迷，我也希望献上自己对 Zephyr 的敬意。
+
+## 笔记原则
+
+- 深入剖析源码
+- 图文并茂
+- 思路清晰
+
 ## 目录
-目前支持 Github 在线观浏览和个人博客在线浏览：
+
 
 [**Github 目录**](SUMMARY.md) | [**博客目录1**](http://iot-fans.xyz/map/zephyr.html) | [**博客目录2**](http://iot-fans.coding.me/map/zephyr.html)
 
