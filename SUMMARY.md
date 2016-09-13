@@ -11,7 +11,7 @@
       * [执行上下文](src/kernel/nanokernel/context.md)
       * [初识线程](src/kernel/nanokernel/thread.md)
       * [内核大总管_nanokernel](src/kernel/nanokernel/nanokernel.md)
-	  * [fiber服务]
+	  * [fiber服务](src/kernel/nanokernel/fiber.md)
 	  * [系统启动流程(汇编部分)]
 	  * [系统启动流程(C语言部分)]
 	  * [原子操作 atomic]
