@@ -44,14 +44,11 @@ struct tcs {
 
 > 注意：由于该结构体涉及到芯片的寄存器，所以不同架构的芯片的线程控制结构体是有区别的。本文讨论cortex-m3 的线程控制结构。另外，由于与具体芯片相关，所以将 Zephyr OS 移植到其它架构的芯片时，需要考虑移植线程相关的代码。
 
-- link：多个线程可以构成一个线程链表，link 就指向该链表中的下一个线程。例如，内核中的所有等待线程会形成一个等待队列，具体信息请参考《Zephyr OS nano 内核篇：等待队列 wait_q》
-- flags：用来表示该线程具有哪些 flag，这些flag 是系统预定义的位掩码。
-
-
+- link：多个线程可以构成一个线程链表，link 就指向该链表中的下一个线程。例如，内核中的所有处于就绪状态的线程会形成一个就绪队列；内核中的所有等待线程会形成一个等待队列，具体信息请参考《Zephyr OS nano 内核篇：等待队列 wait_q》
+- flags：用来表示该线程具有哪些 flag，这些 flag 是系统预定义的位掩码。
 > 所谓的位掩码，是指每个每个掩码占 1 位。
->
 > ```
-#define FIBER 0x000         // BIT(0) 为 0 表示该线程是 fiber
+> #define FIBER 0x000         // BIT(0) 为 0 表示该线程是 fiber
 #define TASK  0x001	        // BIT(0) 为 1 表示该线程是 task
 #define INT_ACTIVE 0x002    // BIT(1) 为 1 表示执行上下文是中断 handler
 #define EXC_ACTIVE 0x004    // BIT(2) 为 1 表示执行上下文是异常
@@ -64,30 +61,43 @@ struct tcs {
 	       */
 #define ESSENTIAL 0x200    // BIT(9) 为 1 表示该线程不能被终止
 #define NO_METRICS 0x400   // BIT(10)为 1 表示_Swap() not to update task metrics
-```
+> ```
 
-- basepri：用于上下文切换时的现场保存与恢复。当线程由执行态转为其它状态(例如等待一个信号量而被加入到等待队列、或时间片到期后被加入就绪队列)，调度器会将该线程的 BASEPRI 寄存器中的值保持到该成员。当该线程被再次调度时，调度器会将该变量恢复到寄存器中。
+- basepri：用于上下文切换时的现场保存与恢复。具体信息请参考《Zephyr OS nano 内核篇： 上下文切换》。
 - prio：指定本线程的优先级。就绪链表中的线程就是按照优先级的顺序排列的。
 - custom_data：线程自定义数据。
 - coopReg：对于 Cortex-M 系列，该变量没有使用。
-- preempReg：也是用于上下文切换时的现场保存与恢复，这些寄存器包括 v1-v8、堆栈寄存器sp
-- entry：函数指针，指向线程的入口函数(即线程的执行体)和参数，当线程被调用时候将调用该函数。
+- preempReg：也是用于上下文切换时的现场保存与恢复。
+> ```
+> struct preempt {
+	uint32_t v1;  /* r4 */
+	uint32_t v2;  /* r5 */
+	uint32_t v3;  /* r6 */
+	uint32_t v4;  /* r7 */
+	uint32_t v5;  /* r8 */
+	uint32_t v6;  /* r9 */
+	uint32_t v7;  /* r10 */
+	uint32_t v8;  /* r11 */
+	uint32_t psp; /* r13 */
+};
+> ```
 
+- entry：函数指针，指向线程的入口函数(即线程的执行体)和参数，当线程被调用时候将调用该函数。
 > ```
 > struct __thread_entry {
-	_thread_entry_t pEntry; // 指向线程的入口函数
+> 	_thread_entry_t pEntry; // 指向线程的入口函数
 	void *parameter1;		// 指向入口函数的第一个参数 arg1
 	void *parameter2;		// 指向入口函数的第二个参数 arg2
 	void *parameter3;		// 指向入口函数的第三个参数 arg3
 };
->  // 线程的入口函数的函数原型
+// 线程的入口函数的函数原型
 typedef void (*_thread_entry_t)(_thread_arg_t arg1,
 							    _thread_arg_t arg2,
 							    _thread_arg_t arg3);
 > ```
 
 - next_thread：与 link 类似，指向线程构成的链表中的下一个线程。不过 next_thread 指向的链表是由内核中所有的 fiber 和 task 构成的链表。
-- nano_timeout：指定该线程所绑定的超时服务。关于超时服务，请参考《Zephyr OS nano 内核篇：超时服务 timeout》
+- nano_timeout：指定该线程所绑定的超时服务。关于超时服务，请参考《Zephyr OS nano  内核篇：超时服务 timeout》
 - errno_var：错误号。
 - uk_task_ptr：与microkernel相关，目前还不知道是干嘛的。
 
@@ -220,3 +230,15 @@ struct __esf {
 - lr：用来保存线程返回时的地址。
 - pc：当线程执行到一半时，可能被切换出去(比如时间片到期了)，而 pc 指针就可以用来保存被切换出去时的地址。
 - xpsr：用来保存线程当前的状态。
+
+> 总结，用来保存线程上下文的变量包括：
+> - struct __esf 中的r0,r1,r2,r3,r12,r14,r15,xpsr
+> - struce tcs 中的 struct preempt 中的r4,r5,r6,r7,r8,r9,r10,r11,r13
+> - struct tcs 中的 basepri
+> 
+> 即保存的寄存器现场包括：r0-r15, xpsr, basepri
+
+# 线程的本质
+我们可以从逻辑上将线程看成两部分：
+- 线程的执行实体，即线程的入口函数
+- 线程栈
