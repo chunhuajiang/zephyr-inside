@@ -14,6 +14,7 @@ tags: [Zephyr]
 - [fiber_delayed_start()](#fiber_delayed_start)
 - [fiber_delayed_start_cancel()](#fiber_delayed_start_cancel)
 
+<!--more-->
 # _nano_fiber_ready
 ```
 void _nano_fiber_ready(struct tcs *tcs)
