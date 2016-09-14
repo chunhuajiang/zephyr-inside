@@ -17,7 +17,7 @@
       * [原子操作 atomic](src/kernel/nanokernel/atomic.md)
       * [内核链表 dlist](src/kernel/nanokernel/dlist.md)
       * [等待队列 wait_q](src/kernel/nanokernel/wait_q.md)
-      * [超时服务 timeout]
+      * [超时服务 timeout](src/kernel/nanokernel/timeout.md)
       * [定时器 timer]
       * [SysTick]
       * [上下文切换]
