@@ -16,9 +16,7 @@
 [**Github 目录**](SUMMARY.md) | [**博客目录1**](http://iot-fans.xyz/map/zephyr.html) | [**博客目录2**](http://iot-fans.coding.me/map/zephyr.html)
 
 ## 贡献
-如果你想分享关于Zephyr OS 的学习笔记，热烈欢迎~~
-
-请参考：[**贡献代码**](contribution/main.md)
+如果你想分享关于Zephyr OS 的学习笔记，热烈欢迎，具体细节请参考：[CONTRIBUTION.md](CONTRIBUTION.md)
 
 ## 学习交流
 
