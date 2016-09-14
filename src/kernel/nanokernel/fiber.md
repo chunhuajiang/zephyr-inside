@@ -80,6 +80,8 @@ ano_thread_id_t _fiber_start(char *pStack,
 	return tcs;
 }
 ```
+该函数用于启动一个新的 fiber 服务，即创建一个新的线程。
+
 irq_lock() 和 irq_unlock() 用于屏蔽中断和使能中断，具体信息请参考《Zephyr OS nano 内核篇：中断的使能和屏蔽》。
 
 _Swap()用于进行上下文切换。当调用_Swap()函数后，调度器会保持当前正在执行的上下文的现场信息，然后调用就绪中优先级最高的线程去执行。具体信息请参考《Zephyr OS nano 内核篇：上下文切换》。
@@ -115,7 +117,86 @@ void fiber_yield(void)
 - 内核中存在就绪线程
 - 该线程的优先级比内核中优先级最高的就绪线程的优先级低(或相等)
 
+释放完 CPU 后，该线程的状态由执行态转变为了就绪态，并当该线程在就绪链表中的优先级最高时会被调度器再次调度并执行。
+
 # _nano_fiber_swap
 ```
+FUNC_NORETURN void _nano_fiber_swap(void)
+{
+	unsigned int imask;
 
+	imask = irq_lock();
+	_Swap(imask);
+
+	// 编译器不知道 _Swap() 不会反悔，因此会发出一个警告，除非我
+	// 们使用下面的宏明确地告诉编译器
+	CODE_UNREACHABLE;
+}
+```
+_nano_fiber_swap() 也是主动释放 CPU 的使用权，但是与 fiber_yield() 不同的是，该函数释放完 CPU 后，不会被加入就绪队列，因为该线程将永远不会被再执行。
+
+# fiber_abort
+```
+FUNC_NORETURN void fiber_abort(void)
+{
+	_thread_exit(_nanokernel.current);
+	_nano_fiber_swap();
+}
+```
+将当前线程从线程链表　_nanokernel.threads 中删除，然后释放 CPU。
+
+# fiber_delayed_start
+```
+nano_thread_id_t fiber_delayed_start(char *stack,
+			  unsigned int stack_size_in_bytes,
+			  nano_fiber_entry_t entry_point, int param1,
+			  int param2, unsigned int priority,
+			  unsigned int options, int32_t timeout_in_ticks)
+{
+	unsigned int key;
+	struct tcs *tcs;
+
+	tcs = (struct tcs *)stack;
+	_new_thread(stack, stack_size_in_bytes, NULL, (_thread_entry_t)entry_point,
+		(void *)param1, (void *)param2, (void *)0, priority, options);
+
+	key = irq_lock();
+
+	_nano_timeout_add(tcs, NULL, timeout_in_ticks);
+
+	irq_unlock(key);
+	return tcs;
+}
+```
+该函数的作用与 _fiber_start() 类似，都会创建一个线程，其不同之处被创建的线程不是立即被加入到就绪线程链表中，而是被加入到一个超时链表中。当经过 timeout_in_ticks 个系统滴答后，该线程才会被加入到就绪线程链表。
+
+关于超时链表，请参考《Zephyr OS nano 内核篇： 超时服务 timeout》
+
+该函数定义了两个别名：
+```
+FUNC_ALIAS(fiber_delayed_start, fiber_fiber_delayed_start, nano_thread_id_t);
+FUNC_ALIAS(fiber_delayed_start, task_fiber_delayed_start, nano_thread_id_t);
+```
+
+# fiber_delayed_start_cancel
+```
+void fiber_delayed_start_cancel(nano_thread_id_t handle)
+{
+	struct tcs *cancelled_tcs = handle;
+	int key = irq_lock();
+	
+	// 从超时链表中删除该线程的节点
+	_nano_timeout_abort(cancelled_tcs);
+	// 从 _nanokernel.threads 的链表中删除该节点
+	_thread_exit(cancelled_tcs);
+
+	irq_unlock(key);
+}
+```
+该函数的作用是取消使用 fiber_delayed_start() 函数创建的线程，即将其从超时链表中删除。
+
+该函数也定义了两个别名：
+```
+FUNC_ALIAS(fiber_delayed_start_cancel, fiber_fiber_delayed_start_cancel, void);
+FUNC_ALIAS(fiber_delayed_start_cancel, task_fiber_delayed_start_cancel, void);
 ```

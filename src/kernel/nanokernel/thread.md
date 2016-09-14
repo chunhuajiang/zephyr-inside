@@ -8,6 +8,7 @@ tags: [Zephyr]
 
 - [线程结构体的定义](#线程结构体的定义)
 - [创建一个新线程](#创建一个新线程)
+- [退出一个线程](#退出一个线程)
 - [线程的本质](#线程的本质)
 
 <!--more-->
@@ -258,6 +259,27 @@ struct __esf {
 > - struct tcs 中的 basepri
 > 
 > 即保存的寄存器现场包括：r0-r15, xpsr, basepri
+
+# 退出一个线程
+```
+void _thread_exit(struct tcs *thread)
+{
+	if (thread == _nanokernel.threads) {
+		// 如果该线程是链表中的头结点，直接删除之
+		_nanokernel.threads = _nanokernel.threads->next_thread;
+	} else {
+		// 如果该线程不是链表中的头结点，先查找到该节点，再删除之
+		struct tcs *prev_thread;
+
+		prev_thread = _nanokernel.threads;
+		while (thread != prev_thread->next_thread) {
+			prev_thread = prev_thread->next_thread;
+		}
+		prev_thread->next_thread = thread->next_thread;
+	}
+}
+```
+将线程从 _nanokernel.threads 指向的线程链表中删除。
 
 # 线程的本质
 我们可以从逻辑上将线程看成两部分：
