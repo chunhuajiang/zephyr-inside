@@ -56,7 +56,7 @@ def generate_toc(fname):
 def tr_header(header):
     global lnk_temp
     lvl, txt = re.findall(r'^(\d+) (.*)', header)[0]
-    return lnk_temp%((int(lvl)-top_level)*'    ', txt, re.sub(' ','-',re.sub('[^-a-z0-9 ]','',txt.lower())))
+    return lnk_temp%((int(lvl)-top_level)*'    ', txt, re.sub(' ','-',txt.lower()))
 
 if __name__ == '__main__':
     if len(sys.argv)<2:
