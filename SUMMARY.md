@@ -28,6 +28,13 @@
       * [总结]
 * [驱动篇]
    * [设备驱动模型](src/driver/device-driver-module.md)
+* [移植篇]
+   * [cc2538]
+      * [前言]
+      * [搭建框架]()
+      * [电源/时钟配置]()
+      * [开发串口驱动]()
+	  * [其它驱动...]
 * [网络篇]
    * [Buffer 管理：简单 Buffer](src/net/simply-buf.md)
 * [蓝牙篇]
