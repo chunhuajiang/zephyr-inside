@@ -318,7 +318,7 @@ void net_buf_simple_push_le16(struct net_buf_simple *buf, uint16_t val)
 
 向 buf 的头部添加 2 个字节的 unsigned short 类型的数据，且该数据在 buf 中以小端的格式存储。
 
-### net_buf_simple_push_le16
+### net_buf_simple_push_be16
 
 ```
 void net_buf_simple_push_be16(struct net_buf_simple *buf, uint16_t val)
