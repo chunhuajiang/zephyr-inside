@@ -64,7 +64,7 @@ Zephyr 的中文翻译是“和风；西风；轻薄织物”，由此可以看�
 
 Zephyr 内核是一个微型内核，被设计用于资源受限的系统：从简单的嵌入式传感器、可穿戴 LED，到复杂的智能手表、物联网无线网关。
 
-Zephyr 支持多架构，包括：ARM Cortex-M、Intel x86 和 ARC。在 **这里** 可以查看 Zephyr 支持的所有平台。
+Zephyr 支持多架构，包括：ARM Cortex-M、Intel x86 和 ARC。在 [这里](https://www.zephyrproject.org/doc/board/board.html)可以查看 Zephyr 支持的所有平台。
 
 与其它微型内核相比，Zephyr 内核有很多独特的优秀特性：
 
