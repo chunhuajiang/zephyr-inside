@@ -103,7 +103,7 @@ struct tcs {
     ...
 };
 ```
-其在内存空间的存储情况如图 4 右边部分所示。我们需要注意其 link 成员，它是 struct tcs 的第一个成员，其类型是一个指向线程的指针。
+其在内存空间的存储情况如图 3 右边部分所示。我们需要注意其 link 成员，它是 struct tcs 的第一个成员，其类型是一个指向线程的指针。
 
 当队列为空时，wait_q 的 tail 成员指向该队列自身的 head 成员，其结构如图 3 所示。((struct tcs *)wait_q->tail) 将 tail 强制转换为一个线程结构体指针，也就是说，tail 所指向的地址用于存放一个线程，而由于 link 是线程结构体 struct tcs 的第一个成员，且是一个指针，所以 ((struct tcs *)wait_q->tail)->link 的含义就是**有一个指针变量，该变量自身的地址等于 &wait_q->tail(即&wait_q->head), 该变量指向了一个线程的结构体**。
 
@@ -118,9 +118,9 @@ _nano_wait_q_init(&wait_q);
 
 _nano_wait_q_put(&wait_q);
 ```
-其在内存空间的存储情况如图 4 所示。
+其在内存空间的存储情况如图 3 所示。
 <center>![](/images/zephyr/kernel/nanokernel/wait_q/4.png)</center>
-<center>图 4. 队列为空时插入线程</center>
+<center>图 3. 队列为空时插入线程</center>
 
 > 通常，当前正在执行的线程将自己加入到等待线程后，会调用函数 _swip() 释放 CPU，此时处于就绪状态的线程中的优先级最高的线程会占用 CPU 进行执行。
 
@@ -168,10 +168,13 @@ _nano_wait_q_put(&wait_q); // 如图 7
 ```
 <center>![](/images/zephyr/kernel/nanokernel/wait_q/4.png)</center>
 <center>图 4.</center>
+
 <center>![](/images/zephyr/kernel/nanokernel/wait_q/5.png)</center>
 <center>图 5.</center>
+
 <center>![](/images/zephyr/kernel/nanokernel/wait_q/6.png)</center>
 <center>图 6.</center>
+
 <center>![](/images/zephyr/kernel/nanokernel/wait_q/7.png)</center>
 <center>图 7.</center>
 
