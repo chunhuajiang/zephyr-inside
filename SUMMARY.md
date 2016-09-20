@@ -21,9 +21,10 @@
       * [定时器 timer](src/kernel/nanokernel/timer.md)
       * [SysTick]
       * [上下文切换]
-      * [fifo]
-      * [lifo]
       * [信号量 sema]
+      * [FIFO](src/kernel/nanokernel/fifo.md)
+      * [LIFO]
+	  * [Stack]
       * [Ring Buffer]
       * [总结]
 * [驱动篇]

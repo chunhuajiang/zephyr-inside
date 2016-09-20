@@ -77,7 +77,7 @@ void nano_timer_init(struct nano_timer *timer, void *data)
 	SYS_TRACING_OBJ_INIT(nano_timer, timer); // 用于debug
 }
 ```
-在启动刚定时器前，需要调用该函数初始化定时器结构体中的各成员。需要注意到一点，user_data 没有指向用户数据，user_data_backup 指向了用户数据，具体的原因，请参考后面 nano_timer_test() 的分析。
+在启动定时器前，需要调用该函数初始化定时器结构体中的各成员。需要注意到一点，user_data 没有指向用户数据，user_data_backup 指向了用户数据。
 
 ## nano_timer_start
 nano_timer_start(),nano_task_timer_start(),nano_fiber_timer_start(),nano_isr_timer_start()都是函数_timer_start() 的别名：
