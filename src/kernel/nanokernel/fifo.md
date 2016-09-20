@@ -6,7 +6,10 @@ tags: [Zephyr]
 ---
 
 # FIFO 的概念
+nanokernel 中的 FIFO 对象是一种传统的先进先出队列的实现，它主要用于 fiber 上下文。
+
 FIFO 是 Zephyr 内核用于在不同线程间传递数据的服务，向 FIFO 中添加数据和从 FIFO 中取出数据是一个异步的操作。
+
 # FIFO 的定义
 ```
 struct nano_fifo {
@@ -27,6 +30,7 @@ struct nano_fifo {
 
 > !!注意，这里的三个成员均是实体，不是指针。
 
+
 # FIFO 的 API
 FIFO 服务对内核其它服务暴露了如下 API 如下：
 - **nano_fifo_init()**：初始化一个fifo。
@@ -38,6 +42,10 @@ FIFO 服务对内核其它服务暴露了如下 API 如下：
   - nano_task_fifo_get()
   - nano_fiber_fifo_get()
   - nano_isr_fifo_get()
+
+
+
+
 ## nano_fifo_init
 ```
 void nano_fifo_init(struct nano_fifo *fifo)
