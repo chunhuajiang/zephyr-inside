@@ -7,7 +7,7 @@
    * [漫谈Zephyr与Contiki的未来](src/introduce/vs-contiki.md)
 * [内核篇]
    * [nanokernel]
-      * [前言]
+      * [前言](src/kernel/nanokernel/preface.md)
       * [执行上下文](src/kernel/nanokernel/context.md)
       * [初识线程](src/kernel/nanokernel/thread.md)
       * [内核大总管_nanokernel](src/kernel/nanokernel/nanokernel.md)
