@@ -20,7 +20,7 @@
       * [等待队列 wait_q](src/kernel/nanokernel/wait_q.md)
       * [超时服务 timeout](src/kernel/nanokernel/timeout.md)
       * [定时器 timer](src/kernel/nanokernel/timer.md)
-      * [信号量 sema]
+      * [信号量 semaphore](src/kernel/nanokernel/sema.md)
       * [FIFO](src/kernel/nanokernel/fifo.md)
       * [LIFO]
 	  * [栈 Stack]
