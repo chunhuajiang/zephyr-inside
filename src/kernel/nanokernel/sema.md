@@ -9,10 +9,10 @@ tags: [Zephyr]
 
 - [信号量的类型定义](#信号量的类型定义)
 - [信号量的初始化](#信号量的初始化)
-- [获取信号量](#获取信号量)
+- [获取信号](#获取信号)
     - [_sem_take](#_sem_take)
     - [nano_task_sem_take](#nano_task_sem_take)
-- [添加(释放)信号量](#添加(释放)信号量)
+- [释放(发送)信号](#释放发送信号)
     - [_sem_give_non_preemptible](#_sem_give_non_preemptible)
     - [nano_task_sem_give](#nano_task_sem_give)
 
