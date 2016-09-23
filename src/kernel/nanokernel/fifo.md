@@ -7,16 +7,13 @@ tags: [Zephyr]
 
 - [FIFO 的概念](#fifo-的概念)
 - [FIFO 的定义](#fifo-的定义)
-- [FIFO 的 API](#fifo-的-api)
-    - [nano_fifo_init](#nano_fifo_init)
-    - [nano_fifo_get](#nano_fifo_get)
-        - [nano_isr_fifo_get](#nano_isr_fifo_get)
-        - [nano_fiber_fifo_get](#nano_fiber_fifo_get)
-        - [nano_task_fifo_get](#nano_task_fifo_get)
-    - [nano_fifo_put](#nano_fifo_put)
-        - [nano_fiber_fifo_put](#nano_fiber_fifo_put)
-        - [nano_isr_fifo_put](#nano_isr_fifo_put)
-        - [nano_task_fifo_put](#nano_task_fifo_put)
+- [FIFO 的初始化](#fifo-的初始化)
+- [从 FIFO 中获取数据](#从-fifo-中获取数据)
+    - [_fifo_get](#_fifo_get)
+    - [nano_task_fifo_get](#nano_task_fifo_get)
+- [向 FIFO 中添加数据](#向-fifo-中添加数据)
+    - [_fifo_put_non_preemptible](#_fifo_put_non_preemptible)
+    - [nano_task_fifo_put](#nano_task_fifo_put)
 
 <!--more-->
 # FIFO 的概念
@@ -37,30 +34,12 @@ struct nano_fifo {
 #endif
 };
 ```
-除去用于表示的 __next，一共有三个变量，且它们的类型都是队列：
+除去 micorkernel 的 task_q 和 用于表示的 __next，一共有两个变量，且它们的类型都是队列：
 - wait_q:用于保存处于等待状态的fiber。当fiber试图向该fifo中取数据，但是该fifo中没有数据时，该fiber会被放入这个等待队列。
 - data_q:用于保存fifo的数据。
-- task_q:用于保存处于等待状态的task。当task试图向该fifo中取数据，但是该fifo中没有数据时，该task会被加入到这个等待队列。
-
-> !!注意，这里的三个成员均是实体，不是指针。
 
 
-# FIFO 的 API
-FIFO 服务对内核其它服务暴露了如下 API 如下：
-- **nano_fifo_init()**：初始化一个fifo。
-- **nano_fifo_put()**：向fifo中放数据。内核会根据当前的上下文调用对应的put函数。
-  - nano_task_fifo_put()
-  - nano_fiber_fifo_put()
-  - nano_isr_fifo_put()
-- **nano_fifo_get()**：向fifo中取数据。内核会根据当前的上下文调用对应的get函数。
-  - nano_task_fifo_get()
-  - nano_fiber_fifo_get()
-  - nano_isr_fifo_get()
-
-
-
-
-## nano_fifo_init
+# FIFO 的初始化
 ```
 void nano_fifo_init(struct nano_fifo *fifo)
 {
@@ -80,9 +59,7 @@ static inline void data_q_init(struct _nano_queue *q)
 ```
 初始化了fifo结构体中的各个成员。
 
-## nano_fifo_get
-为了更便于理解 fifo 的原理，我们先看 nano_fifo_get() 再看 nano_fifo_put()。
-
+# 从 FIFO 中获取数据
 ```
 void *nano_fifo_get(struct nano_fifo *fifo, int32_t timeout)
 {
@@ -96,19 +73,16 @@ void *nano_fifo_get(struct nano_fifo *fifo, int32_t timeout)
 }
 ```
 
-先看看入参：
-- fifo：待取数据的 fifo
-- timeout_in_ticks：取数据的超时等待时间。
+先看看函数的入参：
+- fifo：待取数据的 fifo。
+- timeout_in_ticks：取数据的超时等待时间，以滴答为单位。函数内部会根据该变量的值来做相应的处理。
 
-根据当前上下文的环境，调用对应的get函数。
+再看看函数的返回值：
+- NULL:获取数据失败。
+- 非空：获取数据成功。
 
-nano_isr_fifo_get、nano_fiber_fifo_get是函数 _fifo_get 的别名。
-```
-FUNC_ALIAS(_fifo_get, nano_isr_fifo_get, void *);
-FUNC_ALIAS(_fifo_get, nano_fiber_fifo_get, void *);
-```
-### nano_isr_fifo_get
-### nano_fiber_fifo_get
+nano_fifo_get 会根据当前上下文的环境，调用对应的get函数。其中，nano_isr_fifo_get、nano_fiber_fifo_get是函数 _fifo_get 的别名。
+## _fifo_get
 ```
 void *_fifo_get(struct nano_fifo *fifo, int32_t timeout_in_ticks)
 {
@@ -130,22 +104,22 @@ void *_fifo_get(struct nano_fifo *fifo, int32_t timeout_in_ticks)
 		return data;
 	}
 
+	//　代码走到这里，说明获取数据失败，且立即返回
 	irq_unlock(key);
 	return data;
 }
 ```
 likely 是编译器内嵌的关键字，编译器会根据这个关键字对代码进行相应的优化，阅读代码时完全可以忽略。
 
-
 当线程从 FIFO 中取数据时，有两种可能：
 - FIFO 中有数据：即数据队列 data_q 不为空，此时就直接调用函数 dequeue_data() 取出数据队列中的队首数据，然后返回该数据的指针。
 - FIFO 中没有数据：即数据队列 data_q 为空，无法取得数据，此时会根据入参 timeout_in_ticks 的值来做对应的处理：
   - 等于 TICKS_NONE，表示当取数据失败时，不等待，立即返回
-  - 不等于 TICKS_NONE，此时会对当前线程做两件事儿：
-    - 将当前线程加入到等待 fifo 的等待队列 wait_q 中
-    - 将当前线程加入到内核的超时链表中，并将等待队列 wait_q 绑定该超时节点上
+  - 不等于 TICKS_NONE，表示获取该信号的线程将陷入阻塞状态。在它陷入阻塞后，有两种可能
+    - 在 timeout_in_ticks 期间内，有另外一个线程向该 FIFO 中添加了一个数据，等待线程将被添加信号的线程唤醒，获取数据成功。
+    - 在 timeout_in_ticks 期间内，没有线程向该 FIFO 中添加数据，那么等待将超时，定时器会将该线程唤醒，获取数据失败。
 
-### nano_task_fifo_get
+## nano_task_fifo_get
 ```
 void *nano_task_fifo_get(struct nano_fifo *fifo, int32_t timeout_in_ticks)
 {
@@ -186,7 +160,7 @@ void *nano_task_fifo_get(struct nano_fifo *fifo, int32_t timeout_in_ticks)
 	return NULL;
 }
 ```
-## nano_fifo_put
+# 向 FIFO 中添加数据
 ```
 void nano_fifo_put(struct nano_fifo *fifo, void *data)
 {
@@ -203,15 +177,8 @@ void nano_fifo_put(struct nano_fifo *fifo, void *data)
 - fifo：待放入数据的 fifo。
 - data：待放入到该 fifo 中的数据。
 
-该函数根据当前上下文的环境，调用对应的put函数。
-
-nano_isr_fifo_put、nano_fiber_fifo_put 都是函数 _fifo_put_non_preemptible 的别名：
-```
-FUNC_ALIAS(_fifo_put_non_preemptible, nano_isr_fifo_put, void);
-FUNC_ALIAS(_fifo_put_non_preemptible, nano_fiber_fifo_put, void);
-```
-### nano_fiber_fifo_put
-### nano_isr_fifo_put
+nano_fifo_put 会根据当前上下文的环境，调用对应的put函数。其中，nano_isr_fifo_put、nano_fiber_fifo_put 都是函数 _fifo_put_non_preemptible 的别名。
+## _fifo_put_non_preemptible
 ```
 void _fifo_put_non_preemptible(struct nano_fifo *fifo, void *data)
 {
@@ -241,8 +208,7 @@ void _fifo_put_non_preemptible(struct nano_fifo *fifo, void *data)
 
 > 目前还没弄明白 _Swip() 和 fiberRtnValueSet() 这两个函数具体的细节部分，这涉及到上下文切换的相关内容。
 
-
-### nano_task_fifo_put
+## nano_task_fifo_put
 
 ```
 void nano_task_fifo_put(struct nano_fifo *fifo, void *data)
@@ -270,6 +236,9 @@ void nano_task_fifo_put(struct nano_fifo *fifo, void *data)
 	irq_unlock(key);
 }
 ```
+
+
+
 
 
 
