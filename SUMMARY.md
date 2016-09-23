@@ -22,7 +22,7 @@
       * [定时器 timer](src/kernel/nanokernel/timer.md)
       * [信号量 semaphore](src/kernel/nanokernel/sema.md)
       * [FIFO](src/kernel/nanokernel/fifo.md)
-      * [LIFO]
+      * [LIFO](src/kernel/nanokernel/lifo.md)
 	  * [栈 Stack]
       * [环形缓冲 Ring Buffer]
 	  * [事件记录器 Event Logger]

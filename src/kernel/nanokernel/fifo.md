@@ -75,7 +75,7 @@ void *nano_fifo_get(struct nano_fifo *fifo, int32_t timeout)
 
 先看看函数的入参：
 - fifo：待取数据的 fifo。
-- timeout_in_ticks：取数据的超时等待时间，以滴答为单位。函数内部会根据该变量的值来做相应的处理。
+- timeout：取数据的超时等待时间，以滴答为单位。函数内部会根据该变量的值来做相应的处理。
 
 再看看函数的返回值：
 - NULL:获取数据失败。
