@@ -24,7 +24,7 @@
       * [FIFO](src/kernel/nanokernel/fifo.md)
       * [LIFO](src/kernel/nanokernel/lifo.md)
       * [栈 Stack](src/kernel/nanokernel/stack.md)
-      * [环形缓冲 Ring Buffer]
+      * [环形缓冲 Ring Buffer](src/kernel/nanokernel/ring_buf.md)
       * [事件记录器 Event Logger]
       * [系统启动流程(汇编部分)]
       * [系统启动流程(C语言部分)]
