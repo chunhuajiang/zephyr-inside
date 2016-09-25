@@ -95,8 +95,14 @@ int _sem_take(struct nano_sem *sem, int32_t timeout_in_ticks)
 		_NANO_TIMEOUT_ADD(&sem->wait_q, timeout_in_ticks);
         // 将当前线程加入到该信号量维护的等待队列
 		_nano_wait_q_put(&sem->wait_q);
-        // 释放 CPU,当前线程(获取信号量的线程)将陷入阻塞状态
-		return _Swap(key);
+		// return _Swap(key);
+		/* 原文是 return _Swap(key)，但是为了分析说明，我们将其拆分为下面两句话 */
+		int value = _Swap(key);
+		// 执行完 _Swap() 函数后，将会切换到其它上下文。如果该函数返回了，有两种可能：
+		// 1. 有线程向该信号量中添加了限号，唤醒了本线程，且在唤醒前设置了本线程的返回值，
+		//    具体信息可参考函数 _sem_give_non_preemptible
+		// 2. 由于等待超时，超时服务唤醒了本线程，本线程的返回值没有被设置，返回默认值 0
+        reutrn value;
 	}
 
 	//　代码走到这里，说明获取信号失败，且立即返回
