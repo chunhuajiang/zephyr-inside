@@ -1,12 +1,12 @@
 # 目录
 
-* [基础篇]
+* [**基础篇**]
    * [Zephyr OS 简介](src/introduce/introduction.md)
    * [Hello World](src/introduce/hello-world.md)
    * [连接硬件 Arduino Due](src/introduce/arduino_due.md)
    * [漫谈Zephyr与Contiki的未来](src/introduce/vs-contiki.md)
-* [内核篇]
-   * [nanokernel]
+* [**内核篇**]
+   * [**nanokernel**]
       * [前言](src/kernel/nanokernel/preface.md)
       * [执行上下文](src/kernel/nanokernel/context.md)
 	  * [task 服务 - 基础](src/kernel/nanokernel/task_basic.md)
@@ -30,17 +30,33 @@
       * [系统启动流程(C语言部分)]
       * [上下文切换 _Swap]
       * [总结]
-   * [microkernel]
-* [驱动篇]
+   * [**microkernel**]
+      * [前言]
+	  * [Task 服务 - 基础]
+	  * [Task 服务]
+	  * [Fiber 服务 - k_server]
+	  * [定时器 Timer]
+	  * [内存管理]
+	     * [内存映射 Memory Map]
+	     * [内存池 Memory Pool]
+      * [线程间同步]
+	     * [事件 Event]
+	     * [信号量 Semaphore]
+	     * [互斥 Mutex]
+	  * [线程间数据传递]
+	     * [FIFO]
+	     * [邮筒 MailBox]
+	     * [管道 Pipe]
+* [**驱动篇**]
    * [设备驱动模型](src/driver/device-driver-module.md)
-* [移植篇]
+* [**移植篇**]
    * [cc2538]
       * [前言]
       * [搭建框架]
       * [电源/时钟配置]
       * [开发串口驱动]
 	  * [其它驱动...]
-* [网络篇]
+* [**网络篇**]
    好多，学完至少得花一两年的时间!
    * [基础]
       * [Buffer 管理：简单 Buffer](src/net/simply-buf.md)
