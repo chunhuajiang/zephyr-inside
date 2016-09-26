@@ -6,7 +6,7 @@
    * [连接硬件 Arduino Due](src/introduce/arduino_due.md)
    * [漫谈Zephyr与Contiki的未来](src/introduce/vs-contiki.md)
 * [**内核篇**]
-   * [**nanokernel**]
+   * [**nanokernel**] 计划9.30日前完成
       * [前言](src/kernel/nanokernel/preface.md)
       * [执行上下文](src/kernel/nanokernel/context.md)
 	  * [task 服务 - 基础](src/kernel/nanokernel/task_basic.md)
@@ -25,12 +25,11 @@
       * [LIFO](src/kernel/nanokernel/lifo.md)
       * [栈 Stack](src/kernel/nanokernel/stack.md)
       * [环形缓冲 Ring Buffer](src/kernel/nanokernel/ring_buf.md)
-      * [事件记录器 Event Logger]
       * [系统启动流程(汇编部分)]
       * [系统启动流程(C语言部分)]
       * [上下文切换 _Swap]
       * [总结]
-   * [**microkernel**]
+   * [**microkernel**] 官方正在对kernel部分正在进行整合，所以microkernel这部分暂时先不研究了
       * [前言]
 	  * [Task 服务 - 基础]
 	  * [Task 服务]
@@ -47,29 +46,35 @@
 	     * [FIFO]
 	     * [邮筒 MailBox]
 	     * [管道 Pipe]
-* [**驱动篇**]
+* [**驱动篇**] 计划 10.15日前完成
    * [设备驱动模型](src/driver/device-driver-module.md)
-* [**移植篇**]
-   * [cc2538]
+   * [控制台驱动]
+   * [串口驱动]
+   * [printk]
+   * [gpio 驱动]
+   * [I2C 驱动]
+   * [SPI 驱动]
+   * [共享中断]
+* [**移植篇**] 计划 10.30日前完成
+   * [cc2538] 移植的最终目的：能用它来做网络相关的实验
       * [前言]
       * [搭建框架]
       * [电源/时钟配置]
       * [开发串口驱动]
 	  * [其它驱动...]
-* [**网络篇**]
-   好多，学完至少得花一两年的时间!
-   * [基础]
+* [**网络篇**] 计划2017年前完成
+   * [**基础**]
       * [Buffer 管理：简单 Buffer](src/net/simply-buf.md)
-   * [IEEE 802.15.4]
-   * [6LoWPAN]
-   * [IPv4]
-   * [IPv6]
-   * [RPL]
-   * [UDP]
-   * [TCP]
-   * [CoAP]
-   * [MQTT]
-   * [LWM2M]
-   * [SEP 2.0]
-   * [Bluetooth]
+   * [**IEEE 802.15.4**] 
+   * [**6LoWPAN**] 
+   * [**IPv4**]
+   * [**IPv6**]
+   * [**RPL**]
+   * [**UDP**]
+   * [**TCP**]
+   * [**CoAP**]
+   * [**MQTT**]
+   * [**LWM2M**]
+   * [**SEP 2.0**]
+   * [**Bluetooth**]
 * [开发者篇]
