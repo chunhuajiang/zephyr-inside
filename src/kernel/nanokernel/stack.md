@@ -5,11 +5,22 @@ categories: ["Zephyr OS"]
 tags: [Zephyr]
 ---
 
+- [栈的类型定义](#栈的类型定义)
+- [栈的初始化](#栈的初始化)
+- [出栈操作](#出栈操作)
+    - [_stack_pop](#_stack_pop)
+    - [nano_task_stack_pop](#nano_task_stack_pop)
+- [入栈操作](#入栈操作)
+    - [_stack_push_non_preemptible](#_stack_push_non_preemptible)
+    - [nano_task_stack_push](#nano_task_stack_push)
+
 栈是 nanokernel 提供的另一种用于在不同线程间传递数据的服务，它也是后进先出的，但是它与 lifo 的不同之处在于两点：
 
 - 栈中的元素的大小是固定的，每个元素都是一个整型；lifo中的元素的数据的大小是不固定的
 - 栈的内存空间是在栈的初始化时就固定了，里面保存的每个元素是实实在在的数据；lifo中保持的数据的内存空间是由向lifo中添加数据的线程分配的，所以lifo里面保存的是数据的指针。
 
+
+<!--more-->
 # 栈的类型定义
 
 ```
@@ -261,3 +272,5 @@ void nano_task_stack_push(struct nano_stack *stack, uint32_t data)
 	irq_unlock(imask);
 }
 ```
+
+

@@ -7,6 +7,16 @@ tags: [Zephyr]
 
 LIFO 是与 FIFO 类似的一种服务，只是它是后进先出的而已。
 
+- [LIFO 的类型定义](#lifo-的类型定义)
+- [LIFO 的初始化](#lifo-的初始化)
+- [从 LIFO 中获取数据](#从-lifo-中获取数据)
+    - [_lifo_get](#_lifo_get)
+    - [nano_task_lifo_get](#nano_task_lifo_get)
+- [向 LIFO 中添加数据](#向-lifo-中添加数据)
+    - [_lifo_put_non_preemptible](#_lifo_put_non_preemptible)
+    - [nano_task_lifo_put](#nano_task_lifo_put)
+
+<!--more-->
 # LIFO 的类型定义
 ```
 struct nano_lifo {
@@ -237,4 +247,7 @@ void nano_task_lifo_put(struct nano_lifo *lifo, void *data)
 	irq_unlock(imask);
 }
 ```
+
+
+
 

@@ -7,6 +7,16 @@ tags: [Zephyr]
 
 与栈有点类似，环形缓冲的大小也是在初始化时就固定了。
 
+- [环形缓冲的类型定义](#环形缓冲的类型定义)
+- [环形缓冲的初始化](#环形缓冲的初始化)
+    - [SYS_RING_BUF_DECLARE_POW2](#sys_ring_buf_declare_pow2)
+    - [SYS_RING_BUF_DECLARE_SIZE](#sys_ring_buf_declare_size)
+    - [sys_ring_buf_init](#sys_ring_buf_init)
+- [define MY_RING_BUF_SIZE    64](#define-my_ring_buf_size----64)
+- [添加数据](#添加数据)
+- [取出数据](#取出数据)
+
+<!--more-->
 # 环形缓冲的类型定义
 
 ```
@@ -284,4 +294,7 @@ int sys_ring_buf_get(struct ring_buf *buf, uint16_t *type, uint8_t *value,
 	return 0;
 }  
 ```
+
+
+
 
