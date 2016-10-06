@@ -1,5 +1,5 @@
 ---
-title: Zephyr OS 网络篇： 缓冲 Buffer 管理 - 简化版
+title: Zephyr OS 网络篇： 缓冲池 - 简单 Buffer
 date: 2016-08-23 21:21:23
 categories: ["Zephyr OS"]
 tags: [Zephyr]
@@ -10,11 +10,8 @@ tags: [Zephyr]
 <!--more-->
 
 # 引言
-从广义的角度来讲，互联的设备就是一个网络。基于这个概念，Zephyr OS 将网络分为两大类：由 IP 协议构成的网络；由低功耗蓝牙协议构成的网络。二者均位于`net`目录下。
 
-Zephyr OS 中的 IP 网络和蓝牙网络共用同一套 Buffer 模型。
-
-Zephyr OS 中的 Buffer 分为两类，分别是简化版 Buffer 和完整版 Buffer。我们先学习简化版 Buffer。
+缓冲池(Buffer Pool)是 Zephyr OS 中的两个协议栈 uIP 和 yaip 所共用的数据结构。缓冲池分为两类，分别是简化版 Buffer 和完整版 Buffer。完整版 Buffer 的接口实现利用了简单般 Buffer 提供的结构。我们先学习简化版 Buffer。
 
 相关代码位于`include/buf.h`和`net/buf.c`。
 # Buffer 的定义
@@ -28,9 +25,9 @@ struct net_buf_simple {
 };
 ```
 主要包含四个成员：
-- data：指向buffer中数据部分的起始地址。
-- len：buffer中已存储数据的长度，单位是字节。
-- size：buffer总共允许存储的数据的长度，单位是字节。
+- data：指向 buffer 中数据部分的起始地址。
+- len：buffer 中已存储数据的长度，单位是字节。
+- size：buffer 总共允许存储的数据的长度，单位是字节。
 - \__buf：存储数据的起始地址。
 
 > data 和 __buf 都指向数据部分的起始地址，但是它们可能不同。
@@ -142,9 +139,9 @@ net_buf_simple_init(my_buf, 2);
   - size 表示 buffer 的总长度，单位是字节
   - __buf 指向 buffer 的保留头部的首地址，即 data[0] 的地址
 - buffer 的数据由三部分组成：
-  - 保留的头部(如果存在)，即 reserved_head 所表示的空间
-  - 已使用buffer，即 len 所表示的空间
-  - 未使用buffer，即 tailroom 所表示的空间
+  - 未使用的、保留的头部 buffer (如果存在)，即 reserved_head 所表示的空间
+  - 已使用的 buffer，即 len 所表示的空间
+  - 未使用的尾部的 buffer，即 tailroom 所表示的空间
 - 数据部分可能有保留头部(reserved_head > 0)，也可能没有保留头部(reserved_head = 0)
 
 # Buffer 的接口
@@ -169,7 +166,7 @@ size_t net_buf_simple_headroom(struct net_buf_simple *buf)
 }
 ```
 
-获取并返回 buffer 的头部的大小
+获取并返回 buffer 的头部(保留的、未使用的空间)的大小
 
 ## net_buf_simple_tailroom
 
@@ -196,7 +193,7 @@ void *net_buf_simple_add(struct net_buf_simple *buf, size_t len)
 }
 ```
 
-向 buffer 中添加数据前的相关工作：
+向 buffer 中添加数据前的准备工作：
 
 - 判断 buf 是否还有足够的空间来保存 len 个字节的数据。
 - 将 buf 中的 len 预增加

@@ -77,7 +77,7 @@
    * [前言](src/net/introduce.md)
    * [缓冲池 Buffer Pool]
       * [简单 Buffer](src/net/common/simply-buf.md)
-      * [完整 Buffer]
+      * [完整 Buffer](src/net/common/full-buf.md)
    * [uIP]
       * [uIP 的架构]
       * [对 uIP 的封装]
