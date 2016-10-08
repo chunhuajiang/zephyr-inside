@@ -82,9 +82,10 @@
    * [缓冲池 Buffer Pool]
       * [简单 Buffer](src/net/common/simply-buf.md)
       * [完整 Buffer](src/net/common/full-buf.md)
-   * [uIP]
-      * [对 uIP 的封装]
-         * [L2 buffer]
+   * [uIP 协议栈]
+      * [协议栈的架构]
+         * [packetbuf](src/net/uip/packetbuf.md)
+         * [L2 buffer](src/net/uip/l2_buf.md)
          * [net context]
          * [net core - 概念](src/net/uip/netcore-concept.md)
          * [net core - 初始化]
@@ -105,5 +106,5 @@
          * [ip buffer]
       * [传输层]
       * [应用层]
-   * [yaip]
+   * [yaip 协议栈]
 * [开发者篇]
