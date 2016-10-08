@@ -75,7 +75,7 @@
          * [初识线程](src/net/uip/contiki-thread.md)
          * [线程调度](src/net/uip/contiki-thread-call.md)
          * [初识事件](src/net/uip/contiki-event.md)
-         * [事件定时器]
+         * [事件定时器](src/net/uip/contiki-etimer.md)
          * [事件驱动举例]
          * [线程切换]
          * [回调定时器]
