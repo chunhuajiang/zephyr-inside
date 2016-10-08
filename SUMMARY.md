@@ -65,24 +65,24 @@
 	  * [RF驱动] 主要涉及CC2538芯片手手册的第23章
       * [SPI 驱动]
 	  * [其它驱动...]
+* [**Contiki 核心思想**]
+   * [前言]
+   * [初识线程](src/contiki/thread.md)
+   * [线程调度](src/contiki/thread-call.md)
+   * [初识事件](src/contiki/event.md)
+   * [事件定时器](src/contiki/etimer.md)
+   * [事件驱动举例]
+   * [线程切换]
+   * [线程退出]
+   * [回调定时器]
+   * [Contiki 启动流程]
+   * [好马要吃回头草]
 * [**网络篇**]
    * [前言](src/net/introduce.md)
    * [缓冲池 Buffer Pool]
       * [简单 Buffer](src/net/common/simply-buf.md)
       * [完整 Buffer](src/net/common/full-buf.md)
    * [uIP]
-      * [Contiki 核心概念]
-         * [初识线程](src/net/uip/contiki-thread.md)
-         * [线程调度](src/net/uip/contiki-thread-call.md)
-         * [初识事件](src/net/uip/contiki-event.md)
-         * [事件定时器](src/net/uip/contiki-etimer.md)
-         * [事件驱动举例]
-         * [线程切换]
-         * [回调定时器]
-         * [Contiki 启动流程]
-         * [好马要吃回头草]
-         * [packetbuf]
-         * [queuebuf]
       * [对 uIP 的封装]
          * [L2 buffer]
          * [net context]
