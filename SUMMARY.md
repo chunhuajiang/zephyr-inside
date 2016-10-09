@@ -84,8 +84,9 @@
       * [完整 Buffer](src/net/common/full-buf.md)
    * [uIP 协议栈]
       * [协议栈的架构]
-         * [packetbuf](src/net/uip/packetbuf.md)
-         * [L2 buffer](src/net/uip/l2_buf.md)
+         * [L2 buffer - 内存模型](src/net/uip/l2_buf.md)
+         * [L2 buffer - packetbuf](src/net/uip/packetbuf.md)
+         * [L2 buffer - API]
          * [net context]
          * [net core - 概念](src/net/uip/netcore-concept.md)
          * [net core - 初始化]

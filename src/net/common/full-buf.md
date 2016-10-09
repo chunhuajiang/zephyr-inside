@@ -8,6 +8,7 @@ tags: [Zephyr]
 
 - [Buffer 的结构体](#buffer-的结构体)
 - [Buffer 的定义](#buffer-的定义)
+- [Buffer 的内存模型](#buffer-的内存模型)
 - [Buffer 的初始化](#buffer-的初始化)
 - [将 Buffer 放到 fifo 中](#将-buffer-放到-fifo-中)
 - [从 fifo 中取出 Buffer](#从-fifo-中取出-buffer)
@@ -89,13 +90,23 @@ Buffer 的定义必须使用宏 NET_BUF_POOL()：
 
 有一点需要特别关注，即每个 buffer 的 free 成员所指向的 fifo 是同一个 fifo。也就是说，使用 NET_BUF_POOL 所定义的一组 Buffer 被绑定到一个 fifo 上面。
 
-从这个初始化宏，我们可以总结出完整版 Buffer 的内存模型：
+# Buffer 的内存模型
+从上面这个宏，我们可以画出完整版 Buffer 的内存模型：
 
 <center>
-![](full_buf.png)
+
+![](/images/zephyr/net/common/net_buf/1.png)
 
 图：完整版 Buffer 的内存模型
 </center>
+
+- 整个缓冲池由多个 net buffer 组成。
+- 每个 net buffer 由三部分组成：
+   - 整个 buffer 控制结构信息的内存区域；
+   - 该 buffer 实际存放数据的内存区域；
+   - 该 buffer 的用户数据的内存区域；
+- 数据区和用户数据区的具体情况将在后面的 L2 buffer 中介绍
+
 
 # Buffer 的初始化
 ```
@@ -123,7 +134,7 @@ void net_buf_put(struct nano_fifo *fifo, struct net_buf *buf)
         // 记为 NET_BUF_FRAGS
 		tail->flags |= NET_BUF_FRAGS;
 	}
-	
+
     // 将该 buf (以及后续分片)放入 fifo 中
 	nano_fifo_put_list(fifo, buf, tail);
 }
@@ -144,7 +155,7 @@ struct net_buf *net_buf_get(struct nano_fifo *fifo, size_t reserve_head)
         // 如果没有获取到 buf，但是当前上下文是 ISR，也立即返回
 		return buf;
 	}
-	
+
 	// 代码走到这里，说明刚才没有获取到 buf，且当前上下文不是 ISR，那么再次调用
     // 函数 net_buf_get_timeout 获取 buf，但是此次传入的参数是 TICKS_UNLIMITED，
     // 表示如果 fifo 中没有 buf，就陷入阻塞状态，一直等待，直到有 buf 被放入到
@@ -166,7 +177,7 @@ struct net_buf *net_buf_get_timeout(struct nano_fifo *fifo,
 	}
 
 	// 代码走到这里，说明取到了 buf
-    
+
 	/* If this buffer is from the free buffers FIFO there wont be
 	 * any fragments and we can directly proceed with initializing
 	 * and returning it.
@@ -206,6 +217,9 @@ struct net_buf *net_buf_ref(struct net_buf *buf)
 	return buf;
 }
 ```
+
+> 引用计数有啥用？目前还不知道，学习到后面时再次碰到应该就知道了。
+
 # 减小 Buffer 的引用计数
 ```
 void net_buf_unref(struct net_buf *buf)
@@ -284,8 +298,3 @@ void net_buf_unref(struct net_buf *buf)
 
 计算 buf 的所有分片的存储的数据长度：
 - static inline size_t net_buf_frags_len(struct net_buf *buf)
-
-
-
-
-
