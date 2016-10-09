@@ -85,6 +85,7 @@
    * [uIP 协议栈]
       * [协议栈的架构]
          * [L2 buffer - 内存模型](src/net/uip/l2_buf.md)
+         * [L2 buffer - 属性](src/net/uip/packet_attr.md)
          * [L2 buffer - packetbuf](src/net/uip/packetbuf.md)
          * [L2 buffer - API]
          * [net context]
