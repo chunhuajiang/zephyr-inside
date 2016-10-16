@@ -1,5 +1,5 @@
 ---
-title: Zephys OS uIP 协议栈：Contiki - 初始事件
+title: Zephys OS uIP 协议栈：Contiki - 初识事件
 date: 2016-10-07 18:36:26
 categories: ["Zephyr OS"]
 tags: [Zephyr]
@@ -19,7 +19,65 @@ tags: [Zephyr]
 ```
 typedef unsigned char process_event_t;
 ```
-事件的本质是一个无符号字符类型的整数，为了便于理解，我们可以将其理解为一个编号。线程的执行实体接收到事件(即一个事件编号)后，会根据这个编号来做相应的处理。
+事件的本质是一个无符号字符类型的整数，为了便于理解，我们可以将其理解为一个编号。
+
+# 系统预定义的事件
+```
+#define PROCESS_EVENT_NONE            0x80
+#define PROCESS_EVENT_INIT            0x81
+#define PROCESS_EVENT_POLL            0x82
+#define PROCESS_EVENT_EXIT            0x83
+#define PROCESS_EVENT_SERVICE_REMOVED 0x84
+#define PROCESS_EVENT_CONTINUE        0x85
+#define PROCESS_EVENT_MSG             0x86
+#define PROCESS_EVENT_EXITED          0x87
+#define PROCESS_EVENT_TIMER           0x88
+#define PROCESS_EVENT_COM             0x89
+#define PROCESS_EVENT_MAX             0x8a
+```
+再次证明，事件的本质只是一个无符号字符类型的整数。
+
+此外，系统还定义了一个静态全局的变量 lastevent，它始终指向系统中编号最大的事件，并在线程环境初始化时被初始化：
+```
+static process_event_t lastevent;
+
+void process_init(void)
+{
+  lastevent = PROCESS_EVENT_MAX;
+  ......
+}
+```
+# 分配事件
+
+除了上面预定义的事件外，我们还可以根据需要申请新的事件：
+```
+process_event_t process_alloc_event(void)
+{
+  return lastevent++;
+}
+```
+它先返回编号最大的事件，然后再将 lastevent 递增。
+
+# 事件驱动
+
+线程的执行实体接收到事件(即一个事件编号)后，会根据这个编号来做相应的处理。我们可以简单地将一个线程实体概括如下：
+```
+PROCESS_THREAD(thread_name, ev, data)
+{
+  PROCESS_BEGIN();
+
+  if (ev == 事件1){
+    xxxx
+  } else if (ev == 事件2) {
+    xxxx
+  } else if (ev == 事件3) {
+    xxxx
+  } ......
+
+  PROCESS_END();
+}
+```
+也就是说，线程实体根据传入的事件，来做相应的处理，即一个给定的事件，可以驱使线程做与这个事件相关的事儿。这就是为什么将 Contiki 叫做事件驱动的操作系统的原因。
 
 # 事件的控制结构
 结构体 struct event_data 用于描述一个事件的相关信息：
@@ -35,6 +93,7 @@ struct event_data {
 - p：该事件所绑定的线程。
 
 # 事件的内存缓冲模型
+
 Contiki 的内核维护了一个环形缓冲队列，这个队列里的每个元素都是一个事件的控制结构。这个环形缓冲队列是由一个数组构成的：
 ```
 static struct event_data events[PROCESS_CONF_NUMEVENTS];
@@ -49,7 +108,10 @@ static process_num_events_t nevents, fevent;
 - nevents：表示该缓冲队列中已经存放的事件控制结构的个数。
 - fevent：是一个下标索引，“指向”缓冲中存放的第一个事件控制结构。
 
+关于这个缓冲模型如何使用，在本节后续部分会体现处理。
+
 # 将事件投递给线程
+
 一个线程的执行实体要被调用，必须将一个事件投递给该线程。事件的投递分为两类：
 - 同步投递：指的是将事件投递给一个线程后，该线程会立即执行。
 - 异步投递：指的是将事件投递给一个线程后，该线程不会理解执行。具体的做法是，先将事件的相关控制信息保存到事件的缓冲队列中，随后调度器会从这个缓冲队列中取出事件的控制信息，然后调用线程的执行实体。
@@ -70,10 +132,10 @@ void process_post_synch(struct process *p, process_event_t ev, process_data_t da
 - ev：要投递给线程的事件
 - data：指向要传递给线程的执行实体的数据
 
-咦，这不就是事件的控制结构体的各个成员嘛！为什么会这样，且看本节后面的内容。
+咦，这不就是事件的控制结构体的各个成员嘛！
 
 ## 异步投递
-函数 process_post 用于像事件投递一个异步事件：
+函数 process_post 用于向线程投递一个异步事件：
 ```
 int process_post(struct process *p, process_event_t ev, process_data_t data)
 {
@@ -106,6 +168,7 @@ int process_post(struct process *p, process_event_t ev, process_data_t data)
 - data：指向要传递给线程的执行实体的数据
 
 所谓的异步投递，指的是将事件的控制结构信息保存到事件的缓冲队列里面，等待调度机处理。
+
 # 处理缓冲队列中的事件
 Contiki 中的调度器使用 do_event() 函数处理缓冲在事件缓冲队列中的事件：
 ```
@@ -153,3 +216,4 @@ static void do_event(void)
    }
 }
 ```
+注意到一点，函数 do_event() 只从事件的缓冲队列中取出了一个事件，然后投递给对于的线程，即 do_event() 每次只处理一个事件。而 do_poll() 会处理线程链表中所有高优先级的线程。

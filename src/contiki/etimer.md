@@ -35,7 +35,7 @@ typedef unsigned long clock_time_t;
 ```
 其中：
 - start：记录定时器启动时的系统时间。
-- interval：记录该定时器需要等待的时间。
+- interval：记录该定时器需要等待的时间，即定时器启动后，经过 interval 这段事件后，定时器就到期了。
 
 定时器的这个结构体不会单独使用，而是内嵌在事件定时器里面的。
 
@@ -255,6 +255,3 @@ clock_time_t timer_remaining(struct timer *t)
   return t->start + t->interval - clock_time();
 }
 ```
-
-
-

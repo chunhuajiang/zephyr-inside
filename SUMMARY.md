@@ -71,7 +71,7 @@
    * [线程调度](src/contiki/thread-call.md)
    * [初识事件](src/contiki/event.md)
    * [事件定时器](src/contiki/etimer.md)
-   * [事件驱动举例]
+   * [事件驱动举例](src/contiki/example.md)
    * [线程切换]
    * [线程退出]
    * [回调定时器]
