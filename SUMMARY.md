@@ -65,24 +65,26 @@
 	  * [RF驱动] 主要涉及CC2538芯片手手册的第23章
       * [SPI 驱动]
 	  * [其它驱动...]
-* [**Contiki 核心思想**]
-   * [前言]
-   * [初识线程](src/contiki/thread.md)
-   * [线程调度](src/contiki/thread-call.md)
-   * [初识事件](src/contiki/event.md)
-   * [事件定时器](src/contiki/etimer.md)
-   * [事件驱动举例](src/contiki/example.md)
-   * [线程切换]
-   * [线程退出]
-   * [回调定时器]
-   * [Contiki 启动流程]
-   * [好马要吃回头草]
 * [**网络篇**]
    * [前言](src/net/introduce.md)
    * [缓冲池 Buffer Pool]
       * [简单 Buffer](src/net/common/simply-buf.md)
       * [完整 Buffer](src/net/common/full-buf.md)
+   * [yaip 协议栈]
+      * [链路（MAC）地址](src/net/yaip/linkaddr.md)
    * [uIP 协议栈]
+      * [**Contiki 核心思想**]
+         * [前言]
+         * [初识线程](src/contiki/thread.md)
+         * [线程调度](src/contiki/thread-call.md)
+         * [初识事件](src/contiki/event.md)
+         * [事件定时器](src/contiki/etimer.md)
+         * [事件驱动举例](src/contiki/example.md)
+         * [线程切换]
+         * [线程退出]
+         * [回调定时器]
+         * [Contiki 启动流程]
+         * [好马要吃回头草]
       * [协议栈的架构]
          * [由一个例子入手](src/net/uip/loopback.md)
          * [网络层的一些定义](src/net/uip/tcpip_def.md)
@@ -111,5 +113,4 @@
          * [ip buffer]
       * [传输层]
       * [应用层]
-   * [yaip 协议栈]
 * [开发者篇]
