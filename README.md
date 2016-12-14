@@ -1,5 +1,7 @@
 # 目录
 
+本分支是 old 分支，请先切换到** [主分支 master](../../tree/master) ** 
+
 * [**基础篇**]
    * [Zephyr OS 简介](src/introduce/introduction.md)
    * [Hello World](src/introduce/hello-world.md)
