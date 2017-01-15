@@ -8,7 +8,8 @@
 
 本系列采用模块化的方式依次学习 Zephyr OS 中的各个主要模块。
 
-- [kernel](../../tree/kernel/)(进行中): 第 2 版 kernel - unified kernel；
+- [入门](../../tree/start/): 通过一些简单的应用，激发你对 zephyr 的兴趣；
+- [kernel](../../tree/kernel/): 第 2 版 kernel - unified kernel；
 - porting: 将 zephyr 移植到 cc2538 的过程；
 - driver: 驱动模块；
 - usb: usb 专题模块；
