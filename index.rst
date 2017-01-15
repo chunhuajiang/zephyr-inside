@@ -6,11 +6,10 @@
 Zephyr Inside - 内核篇
 ==================================================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
+   src/preface.rst
 
 
 Indices and tables
