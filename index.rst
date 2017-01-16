@@ -7,9 +7,10 @@ Zephyr Inside - 内核篇
 ==================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    src/preface.rst
+   src/boot-asm.rst
 
 
 Indices and tables
