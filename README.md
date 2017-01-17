@@ -7,8 +7,9 @@
 - 前言
   - [前言](src/preface.rst)
 - 系统启动流程
-  - [系统启动 - 汇编部分](src/boot-asm.rst)
-  - [系统启动 - C 部分]
+  - [系统启动 - 汇编阶段](src/boot-asm.rst)
+  - [系统启动 - C 准备阶段](src/boot-prep-c.rst)
+  - [系统启动 - 多线程阶段](src/boot-multithread.rst)
 - 线程
   - [线程概述]
   - [线程的本质]

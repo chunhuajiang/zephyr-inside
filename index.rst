@@ -11,6 +11,7 @@ Zephyr Inside - 内核篇
 
    src/preface.rst
    src/boot-asm.rst
+   src/boot-prep-c.rst
 
 
 Indices and tables
