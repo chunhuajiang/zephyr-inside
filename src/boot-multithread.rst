@@ -17,6 +17,7 @@
 
 _Cstart
 ****************************
+ ::
 
     FUNC_NORETURN void _Cstart(void)
     {
@@ -27,38 +28,19 @@ _Cstart
     	char __stack dummy_stack[_K_THREAD_NO_FLOAT_SIZEOF];
     	void *dummy_thread = dummy_stack;
     #endif
-    
-    	/*
-    	 * Initialize kernel data structures. This step includes
-    	 * initializing the interrupt subsystem, which must be performed
-    	 * before the hardware initialization phase.
-    	 */
-    
+      
     	prepare_multithreading(dummy_thread);
     
-    	/* Deprecated */
-    	_sys_device_do_config_level(_SYS_INIT_LEVEL_PRIMARY);
-    
-    	/* perform basic hardware initialization */
+    	_sys_device_do_config_level(_SYS_INIT_LEVEL_PRIMARY); /* Deprecated */
     	_sys_device_do_config_level(_SYS_INIT_LEVEL_PRE_KERNEL_1);
     	_sys_device_do_config_level(_SYS_INIT_LEVEL_PRE_KERNEL_2);
     
     	/* initialize stack canaries */
-    
     	STACK_CANARY_INIT();
-    
     	/* display boot banner */
-    
     	PRINT_BOOT_BANNER();
     
     	switch_to_main_thread();
-    
-    	/*
-    	 * Compiler can't tell that the above routines won't return and issues
-    	 * a warning unless we explicitly tell it that control never gets this
-    	 * far.
-    	 */
-    
     	CODE_UNREACHABLE;
     }
     
@@ -88,6 +70,8 @@ _Cstart
 
 准备多线程环境
 ****************************
+
+ ::
 
     static void prepare_multithreading(struct k_thread *dummy_thread)
     {
@@ -218,4 +202,4 @@ Zephyr 支持多种设备，且这些设备是分级的：
 总结
 ****************************
 
-本节我们故意略过了很多细节，这些细节在我们后面的学习过程中会慢慢讲解。
+本节我们故意略过了很多细节，这些细节在我们后面的学习过程中会慢慢碰到。
