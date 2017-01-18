@@ -1,7 +1,7 @@
 # Zephyr OS 学习笔记 - 内核篇
 
 - **[点击此处切换回 master 分支](../../tree/master/)**
-- **在线预览：[http://iot-fans.xyz/zephyr/inside/kernel/index.html](//iot-fans.xyz/zephyr/inside/kernel/index.html)**
+- **在线预览：[http://iot-fans.xyz/zephyr/inside/kernel/index.html](http//iot-fans.xyz/zephyr/inside/kernel/index.html)**
 
 # 目录
 - 前言
