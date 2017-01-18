@@ -6,8 +6,7 @@
 ## 目录
 
 - 入门实验
-  - [搭建Zephyr开发环境]
-  - [hello world]
+  - [hello world](src/primary/hello.rst)
   - [shell]
   - [日志]
   - [多线程 - 同步]

@@ -6,10 +6,11 @@
 Zephyr Inside - 入门篇 目录
 ==================================================
 
-Contents:
-
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+
+
+   src/primary/hello.rst
 
 
 
