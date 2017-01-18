@@ -11,6 +11,7 @@ Zephyr Inside - 入门篇 目录
 
 
    src/primary/hello.rst
+   src/primary/shell.rst
 
 
 

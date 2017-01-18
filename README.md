@@ -7,7 +7,7 @@
 
 - 入门实验
   - [hello world](src/primary/hello.rst)
-  - [shell]
+  - [shell](src/primary/shell.rst)
   - [日志]
   - [多线程 - 同步]
   - [多线程 - 哲学家进餐问题]
