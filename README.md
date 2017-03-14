@@ -6,26 +6,16 @@
 
 ## 目录
 
-本系列采用模块化的方式依次学习 Zephyr OS 中的各个主要模块。
+通过模块化的方式依次学习 Zephyr OS 中的各个主要模块。
 
-- [入门](../../tree/start/): 通过一些简单的应用，激发你对 zephyr 的兴趣；
-- [kernel](../../tree/kernel/): 第 2 版 kernel - unified kernel；
-- porting: 将 zephyr 移植到 cc2538 的过程；
-- driver: 驱动模块；
-- usb: usb 专题模块；
-- net-arch: 网络协议栈的架构；
-- ieee802154: 协议栈 layer 2 中的 ieee 802.15.4；
-- 6lowpan: 协议栈中的适配层 6lowpan；
-- bluetooth: 协议栈 layer 2 中的 bluetooth；
-
-对于上面的每个模块，都会创建一个新分支，因此请先切换到该分支。 
-
-## 说明
-本仓库之前的源文件格式是 markdown，但是为了有更好的阅读体验，现在将其修改为 reStructuredText。
-
-新版学习笔记的在线预览地址：[http://iot-fans.xyz/inside/index.html](http://iot-fans.xyz/inside/index.html)
-
-如果你想看老版本学习笔记的内容，请将分支切换到 [old](../../tree/old)。
+- 入门篇： 包括对 Zephyr 的简单介绍，开发环境的搭建，以及一些简单实验，以激发对 Zephyr 的兴趣。
+- 内核篇： 结合官方文档，深入分析源码，增加自己的内功；纯理论部分。
+- 驱动篇： 分析驱动模型，并阐释几个简单的驱动。
+- 网络篇： 分析网络协议栈的架构，并结合实验分析各个示例。
+- 蓝牙篇： 分析蓝牙协议栈的架构，并结合实验分析各个示例。
+- 移植篇： 将 Zephyr 移植到 CC2538，并能通过 802.15.4 实现点对点通信。
+- 应用篇： 完成一个采集数据并上传至云服务器的应用。
+- 杂项篇： 其它相关杂项，包括调试、JavaScript、Python 等。
 
 ## 贡献
 如果你想分享关于Zephyr OS 的学习笔记，热烈欢迎，具体细节请参考：[CONTRIBUTION.md](CONTRIBUTION.md)
