@@ -6,8 +6,6 @@
 
 ## 目录
 
-通过模块化的方式依次学习 Zephyr OS 中的各个主要模块。
-
 - 入门篇： 包括对 Zephyr 的简单介绍，开发环境的搭建，以及一些简单实验，以激发对 Zephyr 的兴趣。
 - 内核篇： 结合官方文档，深入分析源码，增加自己的内功；纯理论部分。
 - 驱动篇： 分析驱动模型，并阐释几个简单的驱动。
@@ -17,12 +15,7 @@
 - 应用篇： 完成一个采集数据并上传至云服务器的应用。
 - 杂项篇： 其它相关杂项，包括调试、JavaScript、Python 等。
 
-## 贡献
-如果你想分享关于Zephyr OS 的学习笔记，热烈欢迎，具体细节请参考：[CONTRIBUTION.md](CONTRIBUTION.md)
+## Others
 
-## 学习交流
-
-QQ 群：580070214
-
-## More
-Zephyr 官方提供了非常系统、全面的说明文档，建议多阅读阅读。这里是该文档的中文版：[https://github.com/tidyjiang8/zephyr-doc](https://github.com/tidyjiang8/zephyr-doc) 
+- QQ 群：580070214
+- Zephyr 文档：[https://github.com/tidyjiang8/zephyr-doc](https://github.com/tidyjiang8/zephyr-doc) 
