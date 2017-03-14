@@ -91,8 +91,8 @@
             "token": "ff100361cdce95dd4c8fb96b4009f7bc"
         },
         "donate": {
-            "wechat": "https://weixin.png",
-            "alipay": "https://alipay.png",
+            "wechat": "http://iot-fans.xyz/resource/weixin.png",
+            "alipay": "http://iot-fans.xyz/resource/alipay.jpg",
             "title": "",
             "button": "赏",
             "alipayText": "支付宝打赏",
