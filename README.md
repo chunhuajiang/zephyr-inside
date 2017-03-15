@@ -17,5 +17,6 @@
 
 ## Others
 
-- QQ 群：580070214
-- Zephyr 文档：[https://github.com/tidyjiang8/zephyr-doc](https://github.com/tidyjiang8/zephyr-doc) 
+- 在线阅读： [http://iot-fans.xyz/zephyr/inside/index.html](http://iot-fans.xyz/zephyr/inside/index.html)
+- QQ 群： 580070214
+- Zephyr 文档：[http://iot-fans.xyz/zephyr/doc/index.html](http://iot-fans.xyz/zephyr/doc/index.html) 
