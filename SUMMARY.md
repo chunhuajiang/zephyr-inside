@@ -15,6 +15,20 @@
    * [实验 - ping](get_started/ping.md)
    * [实验 - 自动获取 IP 地址](get_started/dhcp.md)
    * [实验 - 蓝牙](get_started/beacon.md)
+   * [实验 - JavaScript ](get_started/js.md)
+   * [实验 - Python ](get_started/python.md)
+
+## 调试篇
+* [准备工作](debug/prepare.md)
+* [Qemu](debug/qemu.md)
+* [Arduino 101](debug/arduino_101.md)
+* [Arduino Due](debug/arduino_due.md)
+* [frdm-k64f](debug/frdm-k64f.md)
+* [nRF-51](debug/nrf51.md)
+* [cc2538](debug/cc2538.md)
+* [96b carbon](debug/96b_carbon.md)
+* [stm32](debug/stm32.md)
+
 
 ## 内核篇
 * [前言](kernel/pre.md)
@@ -62,5 +76,3 @@
 ## 移植篇
 
 ## 应用篇
-
-## 杂项
