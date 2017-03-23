@@ -15,8 +15,11 @@
 - 移植篇： 将 Zephyr 移植到 CC2538，并能通过 802.15.4 实现点对点通信。
 - 应用篇： 完成一个采集数据并上传至云服务器的应用。
 
+## 在线阅读：
+
+[GitBook](http://iot-fans.xyz/zephyr/inside/index.html) | [GitHub](https://github.com/tidyjiang8/zephyr-inside/blob/master/SUMMARY.md)
+
 ## Others
 
-- 在线阅读： [http://iot-fans.xyz/zephyr/inside/index.html](http://iot-fans.xyz/zephyr/inside/index.html)
 - QQ 群： 580070214
 - Zephyr 文档：[http://iot-fans.xyz/zephyr/doc/index.html](http://iot-fans.xyz/zephyr/doc/index.html) 
