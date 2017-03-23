@@ -4,7 +4,12 @@
 
 越是深入学习，越为 Zephyr 着迷，我也希望献上自己对 Zephyr 的敬意。
 
-## 目录
+## 在线阅读：
+
+- [http://iot-fans.xyz/zephyr/inside/index.html](http://iot-fans.xyz/zephyr/inside/index.html) 
+- [https://github.com/tidyjiang8/zephyr-inside/blob/master/SUMMARY.md](https://github.com/tidyjiang8/zephyr-inside/blob/master/SUMMARY.md)
+
+## 概览
 
 - 入门篇： 包括对 Zephyr 的简单介绍，开发环境的搭建，以及一些简单实验，以激发对 Zephyr 的兴趣。
 - 调试篇： 对各种常见开发板的单步调试方法汇总，欢迎添加新板子。
@@ -15,9 +20,6 @@
 - 移植篇： 将 Zephyr 移植到 CC2538，并能通过 802.15.4 实现点对点通信。
 - 应用篇： 完成一个采集数据并上传至云服务器的应用。
 
-## 在线阅读：
-
-[GitBook](http://iot-fans.xyz/zephyr/inside/index.html) | [GitHub](https://github.com/tidyjiang8/zephyr-inside/blob/master/SUMMARY.md)
 
 ## Others
 
