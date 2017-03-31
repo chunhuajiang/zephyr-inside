@@ -7,6 +7,7 @@
 * [搭建开发环境](get_started/env.md)
    * [开发环境 - Ubuntu](get_started/env_ubuntu.md)
    * [开发环境 - 懒人版](get_started/env_easy.md)
+* [开发板的选择](board.md)
 * [入门实验]
    * [实验 - hello world](get_started/hello.md)
    * [实验 - shell](get_started/shell.md)
@@ -67,6 +68,14 @@
    * [内核事件日志器]
 
 ## 驱动篇
+* [初识驱动](driver/start.md)
+* [驱动模型](driver/module.md)
+* [GPIO驱动](driver/gpio.md)
+* [控制台驱动](driver/console.md)
+* [串口驱动](driver/uart.md)
+* [Printk 的实现](driver/uart.md)
+* [I2C驱动](driver/i2c.md)
+* [SPI驱动](driver/spi.md)
 
 ## 网络篇
 
