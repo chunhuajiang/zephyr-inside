@@ -4,7 +4,7 @@
 
 期望的实验现象：
 - 从 Windows 能够 ping 通开发板
-- 从 Ubuntu  能够 Ping 通开发板
+- 从 Ubuntu  能够 ping 通开发板
 
 ## 编译 & 烧写
 
