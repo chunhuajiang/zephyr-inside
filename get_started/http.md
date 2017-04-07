@@ -28,13 +28,13 @@ wget 192.168.1.101/index.html
 
 <center>图：发送 HTTP 请求并得到响应</center>
 
-板子收到请求后，回做相应的响应。串口打印的消息为：
+板子收到请求后，会做相应的响应。串口打印的消息为：
 
 <center><img src="./http-2.png" /></center>
 
 <center>图：串口的打印</center>
 
-当 wget 命令接收到板子的响应后，回接收到一个 html 文件 `index.html`，我们可以用浏览器打开该文件：
+当 wget 命令接收到板子的响应后，会接收到一个 html 文件 `index.html`，我们可以用浏览器打开该文件：
 
 <center><img src="./http-3.png" /></center>
 
