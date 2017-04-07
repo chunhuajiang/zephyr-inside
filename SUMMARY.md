@@ -14,13 +14,14 @@
    * [实验 - led](get_started/led.md)
    * [实验 - ping](get_started/ping.md)
    * [实验 - 自动获取 IP 地址](get_started/dhcp.md)
+   * [实验 - http 服务器](get_started/http.md)
    * [实验 - 蓝牙](get_started/beacon.md)
    * [实验 - JavaScript ](get_started/js.md)
    * [实验 - Python ](get_started/python.md)
 
 ## 调试篇
-* [准备工作](debug/prepare.md)
-* [Qemu](debug/qemu.md)
+* [Qemu+命令行](debug/qemu_cmd.md)
+* [Qemu+Eclipse](debug/qemu_eclipse.md)
 * [Arduino 101](debug/arduino_101.md)
 * [Arduino Due](debug/arduino_due.md)
 * [frdm-k64f](debug/frdm-k64f.md)
