@@ -7,7 +7,7 @@
 * [搭建开发环境](get_started/env.md)
    * [开发环境 - Ubuntu](get_started/env_ubuntu.md)
    * [开发环境 - 懒人版](get_started/env_easy.md)
-* [开发板的选择](board.md)
+* [开发板的选择](get_started/board.md)
 * [入门实验]
    * [实验 - hello world](get_started/hello.md)
    * [实验 - shell](get_started/shell.md)

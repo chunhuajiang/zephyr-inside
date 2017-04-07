@@ -1,6 +1,6 @@
 ﻿# 开发环境 - Ubuntu
 
-　　Zephyr 的文档已经比较详细地说明了如何搭建开发环境，这里简略写下步骤。
+Zephyr 的文档已经比较详细地说明了如何搭建开发环境，这里简略写下步骤。
 
 ## 安装依赖
 
@@ -11,19 +11,19 @@ $ sudo apt-get install git make gcc g++ python3-ply ncurses-dev python-yaml pyth
 ## 安装 SDK
 
 ### 下载和安装
-　　Zephyr 当前最新的 SDK 版本为 0.9，可以直接用命令安装：
+Zephyr 当前最新的 SDK 版本为 0.9，可以直接用命令安装：
 ```
 $ wget https://nexus.zephyrproject.org/content/repositories/releases/org/zephyrproject/zephyr-sdk/0.9/zephyr-sdk-0.9-setup.run
 $ sudo chmod +x zephyr-sdk-0.9-setup.run
 $ sudo ./zephyr-sdk-0.9-setup.run
 ```
-　　推荐使用默认的安装路径，即`/opt/zephyr-sdk`。
+推荐使用默认的安装路径，即`/opt/zephyr-sdk`。
 
-　　有很多朋友反映 SDK 下载速度奇慢无比，因此我将其上传到百度云了 —— [链接](http://96boards.net/forum.php?mod=viewthread&tid=54&extra=page%3D1)。
+有很多朋友反映 SDK 下载速度奇慢无比，因此我将其上传到百度云了 —— [链接](http://96boards.net/forum.php?mod=viewthread&tid=54&extra=page%3D1)。
 
 ### 配置
 
-　　SDK 安装完后，还需要配置环境变量，直接使用下面的明令进行配置：
+SDK 安装完后，还需要配置环境变量，直接使用下面的明令进行配置：
 ```
 $ cat <<EOF > ~/.zephyrrc
 export ZEPHYR_GCC_VARIANT=zephyr
@@ -33,7 +33,7 @@ EOF
 
 ## 获取源码
 
-　　Zephyr 的代码仓库托管于 Linux 基金会的后台，并采用 Girret 进行管理，这样做的好处是可以非常方便地进行 Code Review。同时，Zephyr 也在 Github 上创建了一个用户([zephyrproject-rtos](https://github.com/zephyrproject-rtos))，用做代码库的镜像。因此我们可以直接到 GitHub 上面下载它的源代码。
+Zephyr 的代码仓库托管于 Linux 基金会的后台，并采用 Girret 进行管理，这样做的好处是可以非常方便地进行 Code Review。同时，Zephyr 也在 Github 上创建了一个用户([zephyrproject-rtos](https://github.com/zephyrproject-rtos))，用做代码库的镜像。因此我们可以直接到 GitHub 上面下载它的源代码。
 
 
 - 克隆代码：
@@ -60,9 +60,9 @@ EOF
 
 `$ make BOARD=arduino_101`。
 
-　　其中，参数 BOARD= 用于指定编译的镜像用于哪块开发板。
+其中，参数 BOARD= 用于指定编译的镜像用于哪块开发板。
 
-　　要查看 Zephyr 支持哪些开发板，直接输入 `make help`：
+要查看 Zephyr 支持哪些开发板，直接输入 `make help`：
 
 ```
 $ make help                  
@@ -131,7 +131,7 @@ Supported Boards:
 
 ## Hello World
 
-　　Zephyr 支持使用 QEMU 作为模拟器进行仿真。依然在 hello world 所在目录，执行`make BOARD=qemu_x86 qemu`，然后编译系统会编译程序并运行模拟器：
+Zephyr 支持使用 QEMU 作为模拟器进行仿真。依然在 hello world 所在目录，执行`make BOARD=qemu_x86 qemu`，然后编译系统会编译程序并运行模拟器：
 ```
 $ make BOARD=qemu_x86 qemu
   ...
@@ -143,4 +143,4 @@ To exit from QEMU enter: 'CTRL+a, x'
 Hello World! x86
 ```
 
-　　要退出 QEMU 仿真器，请先输入 `CTRL+a`，再输入 `x`。
+要退出 QEMU 仿真器，请先输入 `CTRL+a`，再输入 `x`。
