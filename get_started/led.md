@@ -1,9 +1,10 @@
 # 实验 - LED
 
+`samples/basic/`目录下的例程是与 LED、按键等相关的 GPIO 实验，我们只看下最简单的 LED 闪烁实验。
 
-## 编译&烧写
+## 编译 & 烧写
 
-`samples/basic/`目录下的例程是与 LED、按键等相关的 GPIO 实验，我们只看下最简单的 LED 闪烁实验。进入 blinky 所在目录：
+进入 blinky 所在目录：
 ```
 $ cd samples/basic/blinky 
 $ make BOARD=frdm-k64f
