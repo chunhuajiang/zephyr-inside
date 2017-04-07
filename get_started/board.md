@@ -1,8 +1,8 @@
 ﻿# 开发板的选择
 
-到目前为止，Zephyr 已经支持非常多的开发板了，详见 Zephyr 文档[支持的开发板](http://iot-fans.xyz/zephyr/doc/boards/boards.html)。
+到目前为止，Zephyr 已经支持非常多的开发板了，详见 Zephyr 文档 [支持的开发板](http://iot-fans.xyz/zephyr/doc/boards/boards.html)。
 
-如果你手头上正好有上面所列举的一块或多块开发板，可以就直接拿他们学习。如果没有，推荐使用 NXP 的 frdm_k64f（我们今后的实验也主要使用该开发板），因为：
+如果你手头上正好有上面所列举的一块或多块开发板，可以就直接拿他们学习。如果没有，推荐使用 NXP 的 frdm_k64f（我们今后的实验也主要使用该开发板），原因如下：
 - frdm-k64f 是 Zephyr 官方支持得最好的开发板之一（另一个是 Arduino 101）
 - 直接用 frdm-k64f 就能完成大部分基础实验
 - 直接用 frdm-k64f 就能完成大部分网络实验(自带以太网卡，但是不能进行 ieee 802.15.4 相关实验)
