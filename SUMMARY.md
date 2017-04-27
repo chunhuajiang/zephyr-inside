@@ -85,3 +85,10 @@
 ## 移植篇
 
 ## 应用篇
+
+## 专题篇-MQTT
+* [初识MOTT](theme/mqtt/start.md)
+* [Zephyr中的MQTT示例](theme/mqtt/sample.md)
+* [MQTT相关接口](theme/mqtt/api.md)
+* [MQTT协议简介](theme/mqtt/protocal.imd)
+* [MQTT源码-初始化](theme/mqtt/src-init.md)
